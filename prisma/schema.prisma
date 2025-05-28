@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CustomizationDraft {
+  id        String      @id @default(uuid())
+  email     String
+  content   Json
+  status    DraftStatus @default(DRAFT)
+  paymentId String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Payment   Payment[]
+  Coupon    Coupon?     @relation(fields: [couponId], references: [id])
+  couponId  String?
+
+  @@index([paymentId])
+}
+
+model Payment {
+  id                   String              @id @default(uuid())
+  draftId              String?
+  transactionId        String              @unique
+  email                String
+  amount               Int
+  status               PaymentStatus       @default(PENDING)
+  couponId             String?
+  pixCode              String?
+  qrCode               String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  CustomizationDraft   CustomizationDraft? @relation(fields: [customizationDraftId], references: [id])
+  customizationDraftId String?
+  Coupon               Coupon?             @relation(fields: [couponId], references: [id])
+
+  @@index([couponId])
+  @@index([draftId])
+}
+
+model Coupon {
+  id                 String               @id @default(uuid())
+  code               String               @unique
+  discount           Int
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Payment            Payment[]
+  CustomizationDraft CustomizationDraft[]
+
+  @@index([code])
+  @@index([discount])
+}
+
+enum DraftStatus {
+  DRAFT
+  PUBLISHED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  EXPIRED
+}
