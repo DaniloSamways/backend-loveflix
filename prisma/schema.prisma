@@ -27,7 +27,7 @@ model Payment {
   draftId            String?
   transactionId      String              @unique
   email              String
-  amount             Int
+  amount             Decimal             @db.Decimal(10, 2)
   status             PaymentStatus       @default(PENDING)
   couponId           String?
   pixCode            String?
@@ -44,7 +44,7 @@ model Payment {
 model Coupon {
   id                 String               @id @default(uuid())
   code               String               @unique
-  discount           Int
+  discount           Decimal              @default(0.00) @db.Decimal(10, 2)
   usagesRemaining    Int                  @default(1)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
