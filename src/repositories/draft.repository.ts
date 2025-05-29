@@ -13,6 +13,8 @@ export class DraftRepository {
         email: data.email,
         content: data.content as Prisma.JsonObject,
         status: "DRAFT",
+        paymentId: data.paymentId,
+        couponId: data.couponId,
       },
     });
   }

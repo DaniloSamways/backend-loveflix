@@ -22,13 +22,29 @@ export class DraftController {
   async getDraft(req: Request, res: Response) {
     const { id } = req.params;
     const draft = await this.draftService.getDraft(id);
-    res.json(draft);
+    if (!draft || !draft.id) {
+      res.status(404).end();
+      return;
+    }
+    res.json({
+      content: draft.content,
+      status: draft.status,
+    });
   }
 
   async publishDraft(req: Request, res: Response) {
     const { id } = req.params;
     const draft = await this.draftService.publishDraft(id);
-    res.json(draft);
+
+    if (!draft || draft.status !== DraftStatus.PUBLISHED) {
+      res.status(404).end();
+      return;
+    }
+
+    res.json({
+      content: draft.content,
+      status: draft.status,
+    });
   }
 
   async getByPaymentId(req: Request, res: Response) {
@@ -41,6 +57,15 @@ export class DraftController {
     const { id } = req.params;
     const input = updateContentDraftSchema.parse(req.body);
     const updatedDraft = await this.draftService.updateDraftContent(id, input);
-    res.json(updatedDraft);
+
+    if (!updatedDraft || !updatedDraft.id) {
+      res.status(404).end();
+      return;
+    }
+
+    res.json({
+      content: updatedDraft.content,
+      status: updatedDraft.status,
+    });
   }
 }

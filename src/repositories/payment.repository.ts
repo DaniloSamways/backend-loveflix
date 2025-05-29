@@ -3,9 +3,22 @@ import { prisma } from "../utils/prisma";
 import { CreatePaymentInput } from "../schemas/payment.schema";
 
 export class PaymentRepository {
+  async updatePaymentDraftId(paymentId: string, draftId: string) {
+    return prisma.payment.update({
+      where: { id: paymentId },
+      data: { draftId },
+    });
+  }
+
   async findById(id: string) {
     return prisma.payment.findUnique({
       where: { id },
+    });
+  }
+
+  async findByTransactionId(id: string) {
+    return prisma.payment.findUnique({
+      where: { transactionId: id },
     });
   }
 
@@ -25,7 +38,7 @@ export class PaymentRepository {
 
   async updatePaymentStatus(id: string, status: PaymentStatus) {
     return prisma.payment.updateMany({
-      where: { id },
+      where: { transactionId: id },
       data: { status },
     });
   }

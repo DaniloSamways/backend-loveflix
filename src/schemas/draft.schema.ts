@@ -4,6 +4,7 @@ export const createCustomizationDraftSchema = z.object({
   email: z.string().email(),
   content: z.record(z.unknown()), // Para o campo Json
   paymentId: z.string(),
+  couponId: z.string().optional().nullable(),
 });
 
 export const updateContentDraftSchema = z.object({

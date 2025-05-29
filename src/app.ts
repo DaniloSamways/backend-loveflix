@@ -13,16 +13,16 @@ export const createApp = () => {
   app.use(helmet());
 
   // Configuração contra DDoS/brute force
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // Limite de 100 requisições por IP
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: "Too many requests from this IP, please try again later",
-  });
+  // const limiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000, // 15 minutos
+  //   max: 100, // Limite de 100 requisições por IP
+  //   standardHeaders: true,
+  //   legacyHeaders: false,
+  //   message: "Too many requests from this IP, please try again later",
+  // });
 
   // Aplica a todos as rotas
-  app.use(limiter);
+  // app.use(limiter);
 
   app.use(cors());
   app.use(express.json());

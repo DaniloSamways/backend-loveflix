@@ -20,7 +20,18 @@ export class DraftService {
   }
 
   async createDraftByPayment(paymentId: string) {
-    const payment = await this.paymentService.getPaymentById(paymentId);
+    const payment =
+      await this.paymentService.getPaymentByTransactionId(paymentId);
+
+    // Verifica se já tem algum rascunho para este pagamento
+    const existingDraft = await this.draftRepository.findByPaymentId(
+      payment.id
+    );
+
+    if (existingDraft) {
+      throw new MessageError("Já existe um rascunho para este pagamento");
+    }
+
     if (!payment || payment.status !== "PAID") {
       throw new MessageError("Pagamento não encontrado");
     }
@@ -28,7 +39,11 @@ export class DraftService {
       content: {},
       paymentId: payment.id,
       email: payment.email,
+      couponId: payment.couponId,
     });
+
+    // Atualiza o Payment com o id do draft
+    await this.paymentService.updatePaymentDraftId(payment.id, draft.id);
 
     return draft;
   }

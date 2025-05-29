@@ -10,6 +10,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Error occurred:", err);
   if (err instanceof MessageError) {
     res.status(400).json({
       message: err.message,
