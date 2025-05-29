@@ -47,6 +47,22 @@ export class PaymentService {
     return payment;
   }
 
+  async decrementCouponRemaining(couponCode: string) {
+    const coupon = await this.paymentRepository.findCouponByCode(couponCode);
+    if (!coupon) {
+      throw new MessageError("Cupom não encontrado");
+    }
+
+    if (coupon.usagesRemaining <= 0) {
+      throw new MessageError("Cupom esgotado");
+    }
+
+    // Decrementa o número de utilizações restantes do cupom
+    await this.paymentRepository.decrementCouponRemaining(coupon.id);
+
+    return coupon;
+  }
+
   async createPixPayment(input: CreatePaymentInput) {
     let amount = 15.0;
 
@@ -55,7 +71,8 @@ export class PaymentService {
     if (input.coupon) {
       // Verifica se o cupom existe e aplica desconto
       coupon = await this.paymentRepository.findCouponByCode(input.coupon);
-      if (coupon) {
+
+      if (coupon && coupon.usagesRemaining > 0) {
         amount = 15.0 - coupon.discount;
       } else {
         throw new MessageError("Cupom inválido");
@@ -112,14 +129,24 @@ export class PaymentService {
 
   async updatePaymentStatus(transactionId: string, status: PaymentStatus) {
     try {
-      const payment = await this.getMPOrderByTransactionId(transactionId);
+      const mpPayment = await this.getMPOrderByTransactionId(transactionId);
 
-      if (!payment) {
+      if (!mpPayment) {
         throw new MessageError("Pagamento não encontrado");
       }
 
-      if (payment.status === status) {
+      if (mpPayment.status === status) {
         throw new MessageError("O status do pagamento já está atualizado");
+      }
+
+      if (status == "PAID") {
+        const payment = await this.getPaymentByTransactionId(transactionId);
+        const couponCode = payment.couponId;
+
+        // Atualiza o uso restante do cupom, se houver
+        if (couponCode) {
+          await this.decrementCouponRemaining(couponCode);
+        }
       }
 
       await this.paymentRepository.updatePaymentStatus(transactionId, status);

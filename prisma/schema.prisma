@@ -45,6 +45,7 @@ model Coupon {
   id                 String               @id @default(uuid())
   code               String               @unique
   discount           Int
+  usagesRemaining    Int                  @default(1)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   Payment            Payment[]
