@@ -25,9 +25,15 @@ paymentRoutes.post(
   "/pix",
   asyncHandler(controller.createPixPayment.bind(controller))
 );
+
 paymentRoutes.get(
   "/:paymentId/status",
   asyncHandler(controller.getPaymentStatus.bind(controller))
+);
+
+paymentRoutes.get(
+  "/coupon/:code",
+  asyncHandler(controller.findCouponByCode.bind(controller))
 );
 
 // Webhook Mercado Pago

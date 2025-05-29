@@ -47,8 +47,16 @@ export class PaymentService {
     return payment;
   }
 
-  async decrementCouponRemaining(couponCode: string) {
+  async findCouponByCode(couponCode: string) {
     const coupon = await this.paymentRepository.findCouponByCode(couponCode);
+    if (!coupon) {
+      throw new MessageError("Cupom não encontrado");
+    }
+    return coupon;
+  }
+
+  async decrementCouponRemaining(couponCode: string) {
+    const coupon = await this.findCouponByCode(couponCode);
     if (!coupon) {
       throw new MessageError("Cupom não encontrado");
     }
@@ -58,9 +66,7 @@ export class PaymentService {
     }
 
     // Decrementa o número de utilizações restantes do cupom
-    await this.paymentRepository.decrementCouponRemaining(coupon.id);
-
-    return coupon;
+    return await this.paymentRepository.decrementCouponRemaining(coupon.id);
   }
 
   async createPixPayment(input: CreatePaymentInput) {
@@ -70,7 +76,7 @@ export class PaymentService {
 
     if (input.coupon) {
       // Verifica se o cupom existe e aplica desconto
-      coupon = await this.paymentRepository.findCouponByCode(input.coupon);
+      coupon = await this.findCouponByCode(input.coupon);
 
       if (coupon && coupon.usagesRemaining > 0) {
         amount = 15.0 - coupon.discount;

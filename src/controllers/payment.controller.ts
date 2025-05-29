@@ -16,4 +16,16 @@ export class PaymentController {
     const status = await this.paymentService.verifyPayment(paymentId);
     res.json({ status });
   }
+
+  async findCouponByCode(req: Request, res: Response) {
+    const { code } = req.params;
+    const coupon = await this.paymentService.findCouponByCode(code);
+    if (!coupon || coupon.usagesRemaining <= 0) {
+      res.status(404).json({ message: "Cupom não encontrado" });
+      return;
+    }
+    res.json({
+      discount: coupon.discount,
+    });
+  }
 }
