@@ -7,12 +7,15 @@ import {
 import { EmailService } from "./email.service";
 import { MessageError } from "../errors/message.error";
 import { PaymentService } from "./payment.service";
+import { env } from "../config/env";
+import { ImageService } from "./image.service";
 
 export class DraftService {
   constructor(
-    private draftRepository: DraftRepository,
+    private draftRepository: DraftRepository = new DraftRepository(),
     private paymentService: PaymentService,
-    private emailService: EmailService
+    private imageService: ImageService = new ImageService(),
+    private emailService: EmailService = new EmailService(env.RESEND_API_KEY)
   ) {}
 
   async createDraft(input: CreateCustomizationDraftInput) {
@@ -58,6 +61,8 @@ export class DraftService {
     if (draft?.status !== DraftStatus.DRAFT) {
       throw new MessageError("Apenas rascunhos podem ser publicados");
     }
+
+    await this.imageService.verifyUnusedDraftImages(draft);
 
     return this.draftRepository.publishDraft(id);
   }

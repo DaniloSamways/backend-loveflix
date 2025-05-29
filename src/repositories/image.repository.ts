@@ -1,26 +1,81 @@
-import fs from "fs";
+import { Image } from "@prisma/client";
+import { S3Service } from "../services/s3.service";
+import { prisma } from "../utils/prisma";
+import { MessageError } from "../errors/message.error";
 
 export class ImageRepository {
-  async uploadImage(file: Buffer): Promise<{ path: string; id: string }> {
-    // Salvar localmente em /uploads por enquanto
-    const id = Date.now().toString();
-    const uploadPath = `./uploads/${id}`;
-    await fs.promises.writeFile(uploadPath, file);
-    // Retornar o caminho do arquivo salvo
-    return {
-      path: uploadPath,
-      id
-    };
+  constructor(
+    private s3Service: S3Service = new S3Service(),
+    private bucketFolder = "drafts"
+  ) {}
+
+  async uploadImage(
+    file: Buffer,
+    draftId: string,
+    metadata?: { contentType?: string }
+  ): Promise<Image> {
+    const key = `${this.bucketFolder}/${draftId}/${Date.now()}.webp`;
+
+    // Upload para S3
+    const url = await this.s3Service.uploadFile(key, file, {
+      draftId,
+      contentType: metadata?.contentType || "image/webp",
+    });
+
+    // Salva metadados no banco
+    return prisma.image.create({
+      data: {
+        url,
+        key,
+        draftId,
+        contentType: metadata?.contentType,
+      },
+    });
   }
 
   async deleteImage(imageId: string): Promise<void> {
-    // Deletar o arquivo localmente
-    const filePath = `./uploads/${imageId}`;
-    try {
-      await fs.promises.unlink(filePath);
-    } catch (error: any) {
-      console.error(`Erro ao deletar imagem: ${error.message}`);
-      throw new Error("Erro ao deletar imagem");
-    }
+    const image = await prisma.image.findUnique({
+      where: { id: imageId },
+    });
+
+    if (!image) throw new MessageError("Image not found");
+
+    // Remove do S3
+    await this.s3Service.deleteFile(image.key);
+
+    // Remove do banco
+    await prisma.image.delete({
+      where: { id: imageId },
+    });
+  }
+
+  async listDraftImages(draftId: string): Promise<Image[]> {
+    return prisma.image.findMany({
+      where: { draftId },
+    });
+  }
+
+  async cleanupDraftImages(draftId: string): Promise<void> {
+    const images = await this.listDraftImages(draftId);
+    const s3Keys = images.map((img) => img.key);
+
+    // Remove todas as imagens do S3
+    await Promise.all(s3Keys.map((key) => this.s3Service.deleteFile(key)));
+
+    // Remove registros do banco
+    await prisma.image.deleteMany({
+      where: { draftId },
+    });
+  }
+
+  async generatePresignedUrl(
+    key: string,
+    contentType: string
+  ): Promise<string> {
+    return this.s3Service.generatePresignedUrl(key, contentType);
+  }
+
+  async listDraftFiles(draftId: string) {
+    return await this.s3Service.listDraftFiles(draftId);
   }
 }

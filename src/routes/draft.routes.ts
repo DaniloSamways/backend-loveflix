@@ -6,6 +6,7 @@ import { EmailService } from "../services/email.service";
 import { asyncHandler } from "../middlewares/asyncHandler";
 import { PaymentRepository } from "../repositories/payment.repository";
 import { PaymentService } from "../services/payment.service";
+import { ImageService } from "../services/image.service";
 
 const draftRoutes = express.Router();
 
@@ -15,10 +16,15 @@ const paymentRepository = new PaymentRepository();
 const paymentService = new PaymentService(paymentRepository);
 
 const repository = new DraftRepository();
-const service = new DraftService(repository, paymentService, emailService);
+const imageService = new ImageService();
+const service = new DraftService(
+  repository,
+  paymentService,
+  imageService,
+  emailService
+);
 const controller = new DraftController(service);
 
-// draftRoutes.post("", asyncHandler(controller.createDraft.bind(controller)));
 draftRoutes.get("/:id", asyncHandler(controller.getDraft.bind(controller)));
 draftRoutes.patch(
   "/:id",

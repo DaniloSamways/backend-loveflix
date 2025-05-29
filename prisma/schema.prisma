@@ -55,6 +55,18 @@ model Coupon {
   @@index([discount])
 }
 
+model Image {
+  id          String   @id @default(uuid())
+  url         String
+  key         String   @unique
+  draftId     String
+  contentType String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([draftId])
+}
+
 enum DraftStatus {
   DRAFT
   PUBLISHED

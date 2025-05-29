@@ -10,6 +10,7 @@ import { EmailService } from "../services/email.service";
 import { env } from "../config/env";
 import { MessageError } from "../errors/message.error";
 import crypto from "crypto";
+import { ImageService } from "../services/image.service";
 
 export const paymentRoutes = Router();
 
@@ -19,7 +20,13 @@ const controller = new PaymentController(service);
 
 const draftRepository = new DraftRepository();
 const emailService = new EmailService(env.RESEND_API_KEY);
-const draftService = new DraftService(draftRepository, service, emailService);
+const imageService = new ImageService();
+const draftService = new DraftService(
+  draftRepository,
+  service,
+  imageService,
+  emailService
+);
 
 paymentRoutes.post(
   "/pix",

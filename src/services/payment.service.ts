@@ -79,7 +79,7 @@ export class PaymentService {
       coupon = await this.findCouponByCode(input.coupon);
 
       if (coupon && coupon.usagesRemaining > 0) {
-        amount = 15.0 - coupon.discount;
+        amount = 15.0 - Number(coupon.discount);
       } else {
         throw new MessageError("Cupom inválido");
       }

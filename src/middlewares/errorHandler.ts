@@ -3,6 +3,7 @@ import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
 import { MessageError } from "../errors/message.error";
+import { MulterError } from "multer";
 
 export const errorHandler = (
   err: Error,
@@ -10,7 +11,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Error occurred:", err);
   if (err instanceof MessageError) {
     res.status(400).json({
       message: err.message,
