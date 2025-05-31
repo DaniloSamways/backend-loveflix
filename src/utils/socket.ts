@@ -5,7 +5,11 @@ let io: Server;
 export const initSocket = (httpServer: any) => {
   io = new Server(httpServer, {
     cors: {
-      origin: "*",
+      origin: [
+        "http://localhost:3000",
+        "https://your-production-domain.com",
+        "http://192.168.0.*:3000",
+      ],
     },
   });
 

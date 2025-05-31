@@ -22,4 +22,9 @@ imageRouter.post(
   asyncHandler(controller.upload.bind(controller))
 );
 
+imageRouter.delete(
+  "/draft/:imageId",
+  asyncHandler(controller.delete.bind(controller))
+);
+
 export { imageRouter };

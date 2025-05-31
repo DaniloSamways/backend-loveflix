@@ -16,6 +16,21 @@ export const createApp = () => {
   // Configuração do Helmet (proteção básica)
   app.use(helmet());
 
+  // Configuração CORS
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://your-production-domain.com",
+    "http://192.168.0.12:3000",
+  ];
+
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      credentials: true,
+    })
+  );
+
   // Configuração contra DDoS/brute force
   // const limiter = rateLimit({
   //   windowMs: 15 * 60 * 1000, // 15 minutos
@@ -28,7 +43,6 @@ export const createApp = () => {
   // Aplica a todos as rotas
   // app.use(limiter);
 
-  app.use(cors());
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 

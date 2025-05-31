@@ -27,6 +27,7 @@ export class ImageController {
     const image = await this.imageService.uploadImage(file, draft);
     res.status(201).json({
       url: image.url,
+      id: image.id,
     });
   }
 
@@ -34,5 +35,12 @@ export class ImageController {
     const { draftId } = req.params;
     const images = await this.imageService.getDraftImages(draftId);
     res.json(images);
+  }
+
+  async delete(req: Request, res: Response) {
+    const { imageId } = req.params;
+    await this.imageService.deleteImage(imageId);
+
+    res.status(204).send();
   }
 }

@@ -9,6 +9,14 @@ export class ImageRepository {
     private bucketFolder = "drafts"
   ) {}
 
+  async countDraftImages(draftId: string): Promise<number> {
+    const count = await prisma.image.count({
+      where: { draftId },
+    });
+
+    return count;
+  }
+
   async uploadImage(
     file: Buffer,
     draftId: string,
@@ -38,7 +46,7 @@ export class ImageRepository {
       where: { id: imageId },
     });
 
-    if (!image) throw new MessageError("Image not found");
+    if (!image) throw new MessageError("Imagem não encontrada");
 
     // Remove do S3
     await this.s3Service.deleteFile(image.key);

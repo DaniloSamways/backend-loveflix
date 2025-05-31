@@ -68,7 +68,7 @@ paymentRoutes.post("/webhook", async (req, res) => {
     typeof requestId !== "string" ||
     !dataID
   ) {
-    throw new MessageError("Unauthorized");
+    throw new MessageError("Não autorizado");
   }
 
   const [ts, hash] = signature.split(",");
@@ -81,7 +81,7 @@ paymentRoutes.post("/webhook", async (req, res) => {
     .digest("hex");
 
   if (cyphedSignature !== hash.replace("v1=", "")) {
-    throw new MessageError("Unauthorized");
+    throw new MessageError("Não autorizado");
   }
 
   const transaction = await service.getMPOrderByTransactionId(data.id);

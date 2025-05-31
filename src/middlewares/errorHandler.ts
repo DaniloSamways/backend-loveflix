@@ -11,6 +11,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(err);
   if (err instanceof MessageError) {
     res.status(400).json({
       message: err.message,
@@ -21,7 +22,7 @@ export const errorHandler = (
   // Erros de validação Zod
   if (err instanceof ZodError) {
     res.status(400).json({
-      message: "Validation error",
+      message: "Verifique os campos",
       errors: err.errors.map((e) => ({
         path: e.path.join("."),
         message: e.message,
@@ -34,7 +35,7 @@ export const errorHandler = (
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     console.error("Prisma error:", err);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Erro interno",
     });
     return;
   }
@@ -48,6 +49,6 @@ export const errorHandler = (
 
   // Erro genérico (padrão)
   res.status(500).json({
-    message: "Internal Server Error",
+    message: "Erro interno",
   });
 };

@@ -25,7 +25,7 @@ export class S3Service {
 
     await this.s3Client.send(command);
 
-    const url = `http://localhost:4566/${this.bucketName}/${key}`;
+    const url = `${env.AWS_ENDPOINT}/${this.bucketName}/${key}`;
 
     return url;
   }

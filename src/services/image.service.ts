@@ -10,10 +10,14 @@ export class ImageService {
   ) {}
 
   async uploadImage(file: Buffer, draft: CustomizationDraft): Promise<Image> {
-    if (!file) throw new MessageError("No file provided");
-    if (!draft) throw new MessageError("No draftId provided");
+    if (!file) throw new MessageError("Imagem não fornecida");
+    if (!draft) throw new MessageError("Rascunho não encontrado");
 
-    if (!draft) throw new MessageError("Draft not found");
+    const imagesCount = await this.countDraftImages(draft.id);
+
+    if (imagesCount >= 15) {
+      throw new MessageError("Número máximo de 15 imagens atingido.");
+    }
 
     // Otimiza a imagem
     const optimizedFile = await sharp(file)
@@ -74,5 +78,11 @@ export class ImageService {
         unusedImages.map((image) => this.imageRepository.deleteImage(image.id))
       );
     }
+  }
+
+  async countDraftImages(draftId: string): Promise<number> {
+    if (!draftId) throw new MessageError("Rascunho não encontrado");
+    const images = await this.imageRepository.listDraftImages(draftId);
+    return images.length;
   }
 }

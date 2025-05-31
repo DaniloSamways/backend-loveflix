@@ -27,6 +27,7 @@ export class DraftController {
       return;
     }
     res.json({
+      id: draft.id,
       content: draft.content,
       status: draft.status,
     });
