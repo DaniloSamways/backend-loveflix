@@ -69,4 +69,10 @@ export class DraftController {
       status: updatedDraft.status,
     });
   }
+
+  async deleteDraftUnusedImages(req: Request, res: Response) {
+    const { draftId } = req.params;
+    await this.draftService.deleteDraftUnusedImages(draftId);
+    res.status(204).end();
+  }
 }

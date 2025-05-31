@@ -38,5 +38,9 @@ draftRoutes.get(
   "/by-payment/:paymentId",
   asyncHandler(controller.getByPaymentId.bind(controller))
 );
+draftRoutes.get(
+  "/unused-images/:draftId",
+  asyncHandler(controller.deleteDraftUnusedImages.bind(controller))
+);
 
 export { draftRoutes };

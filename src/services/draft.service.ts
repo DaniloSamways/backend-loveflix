@@ -67,6 +67,20 @@ export class DraftService {
     return this.draftRepository.publishDraft(id);
   }
 
+  async deleteDraftUnusedImages(id: string) {
+    const draft = await this.draftRepository.findById(id);
+
+    if (!draft) {
+      throw new MessageError("Rascunho não encontrado");
+    }
+
+    if (draft.status !== DraftStatus.DRAFT) {
+      throw new MessageError("Apenas rascunhos podem ter imagens deletadas");
+    }
+
+    return this.imageService.verifyUnusedDraftImages(draft);
+  }
+
   async getByPaymentId(paymentId: string) {
     return this.draftRepository.findByPaymentId(paymentId);
   }
@@ -82,6 +96,11 @@ export class DraftService {
       throw new MessageError("Apenas rascunhos podem ser atualizados");
     }
 
-    return this.draftRepository.updateDraftContent(id, input);
+    const updatedDraft = await this.draftRepository.updateDraftContent(
+      id,
+      input
+    );
+
+    return updatedDraft;
   }
 }
