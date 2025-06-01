@@ -25,7 +25,7 @@ export class PaymentController {
       return;
     }
     res.json({
-      discount: coupon.discount,
+      discount: parseFloat(coupon.discount.toString()),
     });
   }
 }

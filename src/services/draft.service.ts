@@ -48,7 +48,10 @@ export class DraftService {
     // Atualiza o Payment com o id do draft
     await this.paymentService.updatePaymentDraftId(payment.id, draft.id);
 
-    return draft;
+    return {
+      ...draft,
+      link: `${env.FRONTEND_URL}/customize/${draft.id}`,
+    };
   }
 
   async getDraft(id: string) {

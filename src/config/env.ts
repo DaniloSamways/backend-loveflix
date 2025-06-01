@@ -4,6 +4,7 @@ import { z } from "zod";
 configDotenv();
 
 const envSchema = z.object({
+  FRONTEND_URL: z.string().url(),
   DATABASE_URL: z.string(),
   MERCADOPAGO_ACCESS_TOKEN: z.string(),
   MARCADOPAGO_SECRET_KEY: z.string(),

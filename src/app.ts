@@ -21,6 +21,7 @@ export const createApp = () => {
     "http://localhost:3000",
     "https://your-production-domain.com",
     "http://192.168.0.12:3000",
+    "https://99d2f42eaf0ffb.lhr.life",
   ];
 
   app.use(

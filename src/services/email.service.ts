@@ -9,18 +9,21 @@ export class EmailService {
 
   async sendPaymentConfirmation(
     email: string,
-    customizationId: string
+    customizationId: string,
+    link: string
   ): Promise<void> {
     try {
       await this.resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Pagamento confirmado!",
+        subject: "Pagamento confirmado! | LoveFlix",
         html: `
           <h1>Seu pagamento foi confirmado!</h1>
-          <p>Obrigado por sua compra. Sua customização está sendo processada.</p>
+          <p>Obrigado por sua compra.</p>
           <p>ID da Customização: ${customizationId}</p>
-          <p>Acompanhe o status pelo nosso site.</p>
+          <p>Link para acessar sua customização:</p>
+          <p><a href="${link}">Acessar Customização</a></p>
+          <p>Se você tiver alguma dúvida, entre em contato em nosso Whatsapp. <a href="https://wa.me/send/?phone=5542999882263&text=Ol%C3%A1%2C+vim+atrav%C3%A9s+do+LoveFlix">(42) 99988-2263</a></p>
         `,
       });
     } catch (error) {
@@ -28,36 +31,4 @@ export class EmailService {
       throw error;
     }
   }
-
-  // async sendStatusUpdate(
-  //   email: string,
-  //   status: DraftStatus,
-  //   customizationId: string
-  // ): Promise<void> {
-  //   const statusMessages: Record<DraftStatus, string> = {
-  //     [DraftStatus.PAID]: "foi confirmado",
-  //     [DraftStatus.PUBLISHED]: "foi publicado",
-  //     [DraftStatus.EXPIRED]: "expirou",
-  //     [DraftStatus.DRAFT]: "está em rascunho",
-  //     [DraftStatus.PENDING]: "está pendente",
-  //     // Add a default for any other DraftStatus if necessary
-  //   };
-
-  //   try {
-  //     await this.resend.emails.send({
-  //       from: "no-reply@seudominio.com",
-  //       to: email,
-  //       subject: `Status da sua customização: ${status}`,
-  //       html: `
-  //         <h1>Status atualizado!</h1>
-  //         <p>O status da sua customização (ID: ${customizationId}) ${
-  //           statusMessages[status] || "foi atualizado"
-  //         }.</p>
-  //       `,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error sending status email:", error);
-  //     throw error;
-  //   }
-  // }
 }

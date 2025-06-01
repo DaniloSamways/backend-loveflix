@@ -47,16 +47,24 @@ export class PaymentService {
     return payment;
   }
 
-  async findCouponByCode(couponCode: string) {
-    const coupon = await this.paymentRepository.findCouponByCode(couponCode);
+  async findCouponByCode(code: string) {
+    const coupon = await this.paymentRepository.findCouponByCode(code);
     if (!coupon) {
-      throw new MessageError("Cupom não encontrado");
+      return;
     }
     return coupon;
   }
 
-  async decrementCouponRemaining(couponCode: string) {
-    const coupon = await this.findCouponByCode(couponCode);
+  async findCouponById(couponId: string) {
+    const coupon = await this.paymentRepository.findCouponById(couponId);
+    if (!coupon) {
+      return;
+    }
+    return coupon;
+  }
+
+  async decrementCouponRemaining(couponId: string) {
+    const coupon = await this.findCouponById(couponId);
     if (!coupon) {
       throw new MessageError("Cupom não encontrado");
     }

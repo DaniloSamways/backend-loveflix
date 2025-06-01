@@ -3,9 +3,9 @@ import { prisma } from "../utils/prisma";
 import { CreatePaymentInput } from "../schemas/payment.schema";
 
 export class PaymentRepository {
-  async decrementCouponRemaining(couponCode: string) {
+  async decrementCouponRemaining(id: string) {
     return prisma.coupon.update({
-      where: { code: couponCode },
+      where: { id },
       data: { usagesRemaining: { decrement: 1 } },
     });
   }
@@ -53,6 +53,12 @@ export class PaymentRepository {
   async findCouponByCode(code: string) {
     return prisma.coupon.findUnique({
       where: { code },
+    });
+  }
+
+  async findCouponById(id: string) {
+    return prisma.coupon.findUnique({
+      where: { id },
     });
   }
 }
