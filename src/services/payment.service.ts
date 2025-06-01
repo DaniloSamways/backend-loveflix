@@ -101,7 +101,7 @@ export class PaymentService {
         payer: {
           email: input.email,
         },
-        description: `Personalização LoveFlix - ${input.email}`,
+        description: `Personalização AmorFlix - ${input.email}`,
       },
     });
 

@@ -16,14 +16,14 @@ export class EmailService {
       await this.resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Pagamento confirmado! | LoveFlix",
+        subject: "Pagamento confirmado! | AmorFlix",
         html: `
           <h1>Seu pagamento foi confirmado!</h1>
           <p>Obrigado por sua compra.</p>
           <p>ID da Customização: ${customizationId}</p>
           <p>Link para acessar sua customização:</p>
           <p><a href="${link}">Acessar Customização</a></p>
-          <p>Se você tiver alguma dúvida, entre em contato em nosso Whatsapp. <a href="https://wa.me/send/?phone=5542999882263&text=Ol%C3%A1%2C+vim+atrav%C3%A9s+do+LoveFlix">(42) 99988-2263</a></p>
+          <p>Se você tiver alguma dúvida, entre em contato em nosso Whatsapp. <a href="https://wa.me/send/?phone=5542999882263&text=Ol%C3%A1%2C+vim+atrav%C3%A9s+do+AmorFlix">(42) 99988-2263</a></p>
         `,
       });
     } catch (error) {
