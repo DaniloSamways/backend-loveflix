@@ -7,8 +7,12 @@ export const initSocket = (httpServer: any) => {
     cors: {
       origin: [
         "http://localhost:3000",
-        "https://your-production-domain.com",
-        "http://192.168.0.*:3000",
+        "http://192.168.0.12:3000",
+        "https://amorflix.com.br",
+        "https://www.amorflix.com.br",
+        "https://d1u5wlui9v9axz.cloudfront.net",
+        "http://ec2-3-209-76-1.compute-1.amazonaws.com",
+        "https://ec2-3-209-76-1.compute-1.amazonaws.com",
       ],
     },
   });
