@@ -11,17 +11,26 @@ import rateLimit from "express-rate-limit";
 export const createApp = () => {
   const app = express();
 
-    // Configuração CORS
+  // Configuração CORS
   const allowedOrigins = [
     "http://localhost:3000",
+    "http://192.168.0.12:3000",
     "https://amorflix.com.br",
     "https://www.amorflix.com.br",
-    "http://192.168.0.12:3000",
+    "https://d1u5wlui9v9axz.cloudfront.net",
+    "http://ec2-3-209-76-1.compute-1.amazonaws.com",
+    "https://ec2-3-209-76-1.compute-1.amazonaws.com"
   ];
 
   app.use(
     cors({
-      origin: allowedOrigins,
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
     })
