@@ -17,6 +17,8 @@ const envSchema = z.object({
   AWS_BUCKET_NAME: z.string(),
   AWS_ENDPOINT: z.string().optional(),
   AWS_FORCE_PATH_STYLE: z.string().optional(),
+
+  ENVIRONMENT: z.string().default("development"),
 });
 
 export const env = envSchema.parse(process.env);
