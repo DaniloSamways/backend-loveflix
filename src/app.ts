@@ -24,49 +24,13 @@ export const createApp = () => {
 
   app.use(
     cors({
-      origin: function (origin, callback) {
-        // Permitir requests sem origin (como Postman, curl)
-        if (!origin) return callback(null, true);
-
-        // Verificar se o origin está na lista de permitidos
-        if (allowedOrigins.includes(origin)) {
-          return callback(null, true);
-        } else {
-          const msg = `Origin ${origin} não permitido por CORS`;
-          return callback(new Error(msg), false);
-        }
-      },
-      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "x-signature",
-        "x-request-id",
-      ],
-      exposedHeaders: ["Authorization"],
-      // credentials: true, // Importante para cookies/sessões
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
+      origin: allowedOrigins,
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     })
   );
 
-  // app.use((req, res, next) => {
-  //   if (req.method === "OPTIONS") {
-  //     res.header("Access-Control-Allow-Origin", req.headers.origin);
-  //     res.header(
-  //       "Access-Control-Allow-Methods",
-  //       "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  //     );
-  //     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  //     res.header("Access-Control-Allow-Credentials", "true");
-  //     res.status(204).end();
-  //   } else {
-  //     next();
-  //   }
-  // });
-
   // Configuração do Helmet (proteção básica)
-  app.use(helmet());
+  // app.use(helmet());
 
   // Configuração contra DDoS/brute force
   // const limiter = rateLimit({
