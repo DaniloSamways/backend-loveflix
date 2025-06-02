@@ -11,7 +11,7 @@ import rateLimit from "express-rate-limit";
 export const createApp = () => {
   const app = express();
 
-  app.set("trust proxy", 1);
+  // app.set("trust proxy", 1);
 
   // Configuração CORS
   const allowedOrigins = [
@@ -37,16 +37,16 @@ export const createApp = () => {
   app.use(helmet());
 
   // Configuração contra DDoS/brute force
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // Limite de 100 requisições por IP
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: "Too many requests from this IP, please try again later",
-  });
+  // const limiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000, // 15 minutos
+  //   max: 100, // Limite de 100 requisições por IP
+  //   standardHeaders: true,
+  //   legacyHeaders: false,
+  //   message: "Too many requests from this IP, please try again later",
+  // });
 
-  // Aplica a todos as rotas
-  app.use(limiter);
+  // // Aplica a todos as rotas
+  // app.use(limiter);
 
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
