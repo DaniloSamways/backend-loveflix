@@ -22,21 +22,23 @@ export const createApp = () => {
     "https://ec2-3-209-76-1.compute-1.amazonaws.com",
   ];
 
-  // app.use(
-  //   cors({
-  //     origin: allowedOrigins,
-  //     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  //     allowedHeaders: ["Content-Type", "Authorization"],
-  //     credentials: true,
-  //   })
-  // );
-
   app.use(
     cors({
-      origin: "*",
+      origin: function (origin, callback) {
+        // Permitir requests sem origin (como Postman, curl)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.indexOf(origin) === -1) {
+          const msg = `O CORS para o origin ${origin} não está permitido.`;
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+      },
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
     })
   );
-
   // app.use((req, res, next) => {
   //   if (req.method === "OPTIONS") {
   //     res.header("Access-Control-Allow-Origin", req.headers.origin);
