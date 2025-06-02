@@ -44,7 +44,7 @@ export const createApp = () => {
         "x-request-id",
       ],
       exposedHeaders: ["Authorization"],
-      credentials: true, // Importante para cookies/sessões
+      // credentials: true, // Importante para cookies/sessões
       preflightContinue: false,
       optionsSuccessStatus: 204,
     })
