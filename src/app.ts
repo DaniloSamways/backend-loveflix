@@ -22,29 +22,35 @@ export const createApp = () => {
     "https://ec2-3-209-76-1.compute-1.amazonaws.com",
   ];
 
+  // app.use(
+  //   cors({
+  //     origin: allowedOrigins,
+  //     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  //     allowedHeaders: ["Content-Type", "Authorization"],
+  //     credentials: true,
+  //   })
+  // );
+
   app.use(
     cors({
-      origin: allowedOrigins,
-      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-      credentials: true,
+      origin: "*",
     })
   );
 
-  app.use((req, res, next) => {
-    if (req.method === "OPTIONS") {
-      res.header("Access-Control-Allow-Origin", req.headers.origin);
-      res.header(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-      );
-      res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-      res.header("Access-Control-Allow-Credentials", "true");
-      res.status(204).end();
-    } else {
-      next();
-    }
-  });
+  // app.use((req, res, next) => {
+  //   if (req.method === "OPTIONS") {
+  //     res.header("Access-Control-Allow-Origin", req.headers.origin);
+  //     res.header(
+  //       "Access-Control-Allow-Methods",
+  //       "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  //     );
+  //     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  //     res.header("Access-Control-Allow-Credentials", "true");
+  //     res.status(204).end();
+  //   } else {
+  //     next();
+  //   }
+  // });
 
   // Configuração do Helmet (proteção básica)
   app.use(helmet());
