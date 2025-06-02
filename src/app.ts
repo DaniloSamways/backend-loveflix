@@ -19,20 +19,17 @@ export const createApp = () => {
     "https://www.amorflix.com.br",
     "https://d1u5wlui9v9axz.cloudfront.net",
     "http://ec2-3-209-76-1.compute-1.amazonaws.com",
-    "https://ec2-3-209-76-1.compute-1.amazonaws.com"
+    "https://ec2-3-209-76-1.compute-1.amazonaws.com",
   ];
 
   app.use(
     cors({
-      origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error("Not allowed by CORS"));
-        }
-      },
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      origin: allowedOrigins,
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
     })
   );
 
