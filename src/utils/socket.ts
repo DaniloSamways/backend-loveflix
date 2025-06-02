@@ -15,6 +15,10 @@ export const initSocket = (httpServer: any) => {
         "https://ec2-3-209-76-1.compute-1.amazonaws.com",
       ],
     },
+    allowEIO3: true, // Permite compatibilidade com Engine.IO v3
+    transports: ["websocket", "polling"], // Habilita explicitamente ambos os transportes
+    pingInterval: 25000,
+    pingTimeout: 20000,
   });
 
   io.on("connection", (socket: Socket) => {
