@@ -11,9 +11,9 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string(),
   PORT: z.string().default("3001"),
 
-  AWS_ACCESS_KEY_ID: z.string(),
-  AWS_SECRET_ACCESS_KEY: z.string(),
-  AWS_REGION: z.string(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().optional(),
   AWS_BUCKET_NAME: z.string(),
   AWS_ENDPOINT: z.string().optional(),
   AWS_FORCE_PATH_STYLE: z.string().optional(),
