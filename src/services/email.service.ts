@@ -14,7 +14,7 @@ export class EmailService {
   ): Promise<void> {
     try {
       await this.resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "contato@marketing.amorflix.com.br",
         to: email,
         subject: "Pagamento confirmado! | AmorFlix",
         html: `
