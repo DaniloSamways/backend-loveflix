@@ -13,7 +13,7 @@ const envSchema = z.object({
 
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
-  AWS_REGION: z.string().optional(),
+  AWS_REGION: z.string(),
   AWS_BUCKET_NAME: z.string(),
   AWS_ENDPOINT: z.string().optional(),
   AWS_FORCE_PATH_STYLE: z.string().optional(),
