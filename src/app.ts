@@ -24,7 +24,16 @@ export const createApp = () => {
 
   app.use(
     cors({
-      origin: allowedOrigins,
+      origin: function (origin, callback) {
+        // Permite requests sem origin (ex: curl, postman)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     })
   );
