@@ -74,6 +74,8 @@ paymentRoutes.post("/webhook", async (req, res) => {
     return;
   }
 
+  console.log("headers", req.headers);
+
   // Verificar assinatura do webhook
   const signature = req.headers["x-signature"];
   const requestId = req.headers["x-request-id"];
