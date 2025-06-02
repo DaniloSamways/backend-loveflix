@@ -11,10 +11,7 @@ import rateLimit from "express-rate-limit";
 export const createApp = () => {
   const app = express();
 
-  // Configuração do Helmet (proteção básica)
-  app.use(helmet());
-
-  // Configuração CORS
+    // Configuração CORS
   const allowedOrigins = [
     "http://localhost:3000",
     "https://amorflix.com.br",
@@ -29,6 +26,9 @@ export const createApp = () => {
       credentials: true,
     })
   );
+
+  // Configuração do Helmet (proteção básica)
+  app.use(helmet());
 
   // Configuração contra DDoS/brute force
   const limiter = rateLimit({
