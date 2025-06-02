@@ -43,24 +43,6 @@ paymentRoutes.get(
   asyncHandler(controller.findCouponByCode.bind(controller))
 );
 
-paymentRoutes.get("/teste", async (req, res) => {
-  const io = getIO();
-  // Notifica via WebSocket
-  io.to(`payment_123`).emit("payment_update", {
-    id: "31231",
-    link: env.FRONTEND_URL + "/customize/31231",
-    email: "dasdasd@sadfasd.com",
-    content: {},
-  });
-
-  // Notifica via email
-  await emailService.sendPaymentConfirmation(
-    "hadeflowing@gmail.com",
-    "123",
-    env.FRONTEND_URL + "/customize/31231"
-  );
-});
-
 // Webhook Mercado Pago
 paymentRoutes.post("/webhook", async (req, res) => {
   const { data } = req.body;
