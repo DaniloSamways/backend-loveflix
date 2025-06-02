@@ -11,8 +11,6 @@ import rateLimit from "express-rate-limit";
 export const createApp = () => {
   const app = express();
 
-  // app.set("trust proxy", 1);
-
   // Configuração CORS
   const allowedOrigins = [
     "http://localhost:3000",
@@ -33,6 +31,21 @@ export const createApp = () => {
     })
   );
 
+  app.use((req, res, next) => {
+    if (req.method === "OPTIONS") {
+      res.header("Access-Control-Allow-Origin", req.headers.origin);
+      res.header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      );
+      res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+      res.header("Access-Control-Allow-Credentials", "true");
+      res.status(204).end();
+    } else {
+      next();
+    }
+  });
+
   // Configuração do Helmet (proteção básica)
   app.use(helmet());
 
@@ -45,7 +58,7 @@ export const createApp = () => {
   //   message: "Too many requests from this IP, please try again later",
   // });
 
-  // // Aplica a todos as rotas
+  // Aplica a todos as rotas
   // app.use(limiter);
 
   app.use(express.json());
