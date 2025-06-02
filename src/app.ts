@@ -5,10 +5,8 @@ import { draftRoutes } from "./routes/draft.routes";
 import { imageRouter } from "./routes/image.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import fs from "fs";
-import { S3Service } from "./services/s3.service";
 import bodyParser from "body-parser";
+import rateLimit from "express-rate-limit";
 
 export const createApp = () => {
   const app = express();
@@ -19,9 +17,8 @@ export const createApp = () => {
   // Configuração CORS
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://your-production-domain.com",
+    "https://amorflix.com.br",
     "http://192.168.0.12:3000",
-    "https://99d2f42eaf0ffb.lhr.life",
   ];
 
   app.use(
@@ -33,16 +30,16 @@ export const createApp = () => {
   );
 
   // Configuração contra DDoS/brute force
-  // const limiter = rateLimit({
-  //   windowMs: 15 * 60 * 1000, // 15 minutos
-  //   max: 100, // Limite de 100 requisições por IP
-  //   standardHeaders: true,
-  //   legacyHeaders: false,
-  //   message: "Too many requests from this IP, please try again later",
-  // });
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // Limite de 100 requisições por IP
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: "Too many requests from this IP, please try again later",
+  });
 
   // Aplica a todos as rotas
-  // app.use(limiter);
+  app.use(limiter);
 
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
