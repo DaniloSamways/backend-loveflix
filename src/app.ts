@@ -11,6 +11,8 @@ import rateLimit from "express-rate-limit";
 export const createApp = () => {
   const app = express();
 
+  app.set("trust proxy", true);
+
   // Configuração CORS
   const allowedOrigins = [
     "http://localhost:3000",
