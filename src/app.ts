@@ -28,17 +28,28 @@ export const createApp = () => {
         // Permitir requests sem origin (como Postman, curl)
         if (!origin) return callback(null, true);
 
-        if (allowedOrigins.indexOf(origin) === -1) {
-          const msg = `O CORS para o origin ${origin} não está permitido.`;
+        // Verificar se o origin está na lista de permitidos
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        } else {
+          const msg = `Origin ${origin} não permitido por CORS`;
           return callback(new Error(msg), false);
         }
-        return callback(null, true);
       },
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-      credentials: true,
+      allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "x-signature",
+        "x-request-id",
+      ],
+      exposedHeaders: ["Authorization"],
+      credentials: true, // Importante para cookies/sessões
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
     })
   );
+
   // app.use((req, res, next) => {
   //   if (req.method === "OPTIONS") {
   //     res.header("Access-Control-Allow-Origin", req.headers.origin);
