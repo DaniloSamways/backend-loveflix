@@ -18,6 +18,7 @@ export const createApp = () => {
   const allowedOrigins = [
     "http://localhost:3000",
     "https://amorflix.com.br",
+    "https://www.amorflix.com.br",
     "http://192.168.0.12:3000",
   ];
 
