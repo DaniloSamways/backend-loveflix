@@ -21,7 +21,6 @@ export class S3Service {
       Body: buffer,
       Metadata: metadata as Record<string, string>,
       ContentType: metadata.contentType,
-      ACL: "public-read", // Define o ACL para tornar o arquivo público
     });
 
     await this.s3Client.send(command);
