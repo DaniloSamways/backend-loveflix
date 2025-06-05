@@ -67,7 +67,16 @@ export class DraftService {
 
     await this.imageService.verifyUnusedDraftImages(draft);
 
-    return this.draftRepository.publishDraft(id);
+    const publishedDraft = await this.draftRepository.publishDraft(id);
+
+    // Enviar email de confirmação
+    await this.emailService.sendPublishConfirmation(
+      draft.email,
+      draft.id,
+      `${env.FRONTEND_URL}/${draft.id}`
+    );
+
+    return publishedDraft;
   }
 
   async deleteDraftUnusedImages(id: string) {
