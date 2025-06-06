@@ -3,6 +3,7 @@ import { ImageRepository } from "../repositories/image.repository";
 import { CustomizationDraft, DraftStatus, Image } from "@prisma/client";
 import { MessageError } from "../errors/message.error";
 import { Content } from "../types/content";
+import { ImageLimitError } from "../errors/imagelimit.error";
 
 export class ImageService {
   constructor(
@@ -16,7 +17,7 @@ export class ImageService {
     const imagesCount = await this.countDraftImages(draft.id);
 
     if (imagesCount >= 20) {
-      throw new MessageError("Número máximo de 20 imagens atingido.");
+      throw new ImageLimitError("Número máximo de 20 imagens atingido.");
     }
 
     // Otimiza a imagem

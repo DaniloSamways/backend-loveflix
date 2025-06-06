@@ -1,9 +1,9 @@
 // src/middlewares/errorHandler.ts
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
 import { MessageError } from "../errors/message.error";
-import { MulterError } from "multer";
+import { ImageLimitError } from "../errors/imagelimit.error";
 
 export const errorHandler = (
   err: Error,
@@ -12,6 +12,14 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   console.log(err);
+  if (err instanceof ImageLimitError) {
+    res.status(400).json({
+      type: "ImageLimitError",
+      message: err.message,
+    });
+    return;
+  }
+
   if (err instanceof MessageError) {
     res.status(400).json({
       message: err.message,
