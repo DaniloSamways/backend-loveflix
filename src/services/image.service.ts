@@ -15,8 +15,8 @@ export class ImageService {
 
     const imagesCount = await this.countDraftImages(draft.id);
 
-    if (imagesCount >= 15) {
-      throw new MessageError("Número máximo de 15 imagens atingido.");
+    if (imagesCount >= 20) {
+      throw new MessageError("Número máximo de 20 imagens atingido.");
     }
 
     // Otimiza a imagem
